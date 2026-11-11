@@ -4,80 +4,82 @@ Aplikasi mobile untuk mengurangi pemborosan makanan dengan menghubungkan bisnis 
 
 **Kelompok:** Daydreamers
 
-**Anggota:**
-- Victoria Lusiana Manullang
-- Siska Clarissa
-- Riyanti Teresa
-- Eka Anastasya Situmorang
+| Anggota | NIM |
+|---|---|
+| Victoria Lusiana Manullang (Ketua) | 241112797 |
+| Siska Clarissa | 241112966 |
+| Riyanti Teresa | 241112192 |
+| Eka Anastasya Situmorang | 241112564 |
 
 **SDGs:** SDG 12 – Responsible Consumption and Production
 
 ---
 
-## Progress Pertemuan 1–5
+## Progress Pertemuan 1–7
+
+### Kerangka aplikasi (`MainShell`)
+- `Scaffold` sebagai kerangka halaman
+- `IndexedStack` menjaga state tiap tab saat berpindah
+- `NavigationBar` + `NavigationDestination` (Material 3) untuk navigasi bawah
+- `Badge` + `ListenableBuilder` menampilkan jumlah item di ikon Keranjang
 
 ### 1. Beranda
 <img src="screenshots/home.png" width="250" alt="Beranda">
 
-**Widget yang diterapkan:**
-- `CustomScrollView` dan `SliverGrid` untuk layout scroll dan grid produk yang responsif
-- `SearchBar` untuk kolom pencarian makanan
-- `ChoiceChip` dan `Wrap` untuk filter kategori (Semua, Bakery, Resto, Cafe)
+- `CustomScrollView` + `SliverGrid` untuk grid produk responsif
+- `SearchBar`, `ChoiceChip` + `Wrap` untuk pencarian dan filter kategori
 - `Card` untuk banner dampak SDG 12 dan kartu produk
 
 ### 2. Detail Produk
 <img src="screenshots/detail.png" width="250" alt="Detail Produk">
 
-**Widget yang diterapkan:**
-- `ListView` dan `AspectRatio` untuk foto dan isi halaman yang bisa di-scroll
-- `Chip` untuk label persentase hemat
-- `IconButton.outlined` untuk pengatur jumlah pesanan
-- `Divider` untuk memisahkan bagian informasi
-- `ConstrainedBox` untuk membatasi lebar konten di layar besar
+- `ListView` + `AspectRatio`, `Chip`, `IconButton.outlined`, `Divider`
+- `ConstrainedBox` membatasi lebar konten di layar besar
 
 ### 3. Keranjang / Checkout
 <img src="screenshots/cart.png" width="250" alt="Keranjang">
 
-**Widget yang diterapkan:**
-- `ListenableBuilder` agar daftar dan total otomatis ter-update
-- `ListView.separated` untuk daftar item pesanan
-- `Card` dan `Row`/`Column` untuk susunan tiap item
-- `Badge` pada ikon navigasi untuk jumlah item
+- `ListenableBuilder`, `ListView.separated`, `Card` + `Row`/`Column`
 
 ### 4. QR Code / Bukti Pickup
 <img src="screenshots/qr.png" width="250" alt="QR Pickup">
 
-**Widget yang diterapkan:**
-- `QrImageView` (package `qr_flutter`) untuk menampilkan QR bukti pengambilan
-- `Card` untuk membungkus detail pesanan
-- `SingleChildScrollView` agar halaman aman di layar kecil
+- `QrImageView` (package `qr_flutter`), `Card`, `SingleChildScrollView`
 
 ### 5. Profil Pengguna
 <img src="screenshots/profile.png" width="250" alt="Profil">
 
-**Widget yang diterapkan:**
-- `CircleAvatar` untuk foto profil
-- `StatTile` (widget buatan sendiri) untuk statistik makanan diselamatkan dan total hemat
-- `ListTile` untuk daftar menu
-- `OutlinedButton` untuk tombol keluar
-
-### Screen berikutnya (rencana)
-Login/Register, Pencarian & Filter, dan Riwayat Pesanan akan dikerjakan pada pertemuan berikutnya.
+- `CircleAvatar`, `StatTile` (widget buatan sendiri), `ListTile`, `OutlinedButton`
+- `RichText` untuk kalimat ringkasan dengan gaya teks campuran
+- `Align` untuk judul bagian "Menu"
 
 ---
 
+## Widget Reusable (`lib/widgets/`)
+
+| Widget | Fungsi |
+|---|---|
+| `ProductCard` | Kartu produk di Beranda |
+| `ProductImage` | Gambar dari asset, dengan ikon pengganti jika file tidak ditemukan |
+| `PrimaryButton` | Tombol utama berukuran seragam di banyak halaman |
+| `InfoRow` | Baris ikon + teks |
+| `StatTile` | Kartu statistik kecil di Profil |
+
 ## Penerapan Materi
 
-- **Material Design 3:** `ThemeData(useMaterial3: true)` dengan `ColorScheme.fromSeed`, serta `NavigationBar`
-- **Reusable widget:** `ProductCard`, `ProductImage`, `PrimaryButton`, `InfoRow`, `StatTile`
-- **Asset:** foto produk di `assets/images/` (dengan ikon pengganti jika file tidak ditemukan)
+- **Material Design 3:** `useMaterial3: true`, `ColorScheme.fromSeed`, `NavigationBar`
+- **Reusable widget:** lihat tabel di atas
+- **Asset:** foto produk di `assets/images/`
 - **Responsive UI:** `SliverGridDelegateWithMaxCrossAxisExtent` dan `ConstrainedBox(maxWidth)`
 
 ## Catatan
 
-- Data produk dan statistik profil masih berupa data dummy.
-- Pencarian, Login/Register, dan Riwayat Pesanan akan dikerjakan pada pertemuan berikutnya.
+- Data produk dan statistik profil masih statis (belum dari server/database).
+- Pencarian, Login/Register, dan Riwayat Pesanan dikerjakan pada tahap berikutnya.
 
 ## Cara menjalankan
+
+```bash
 flutter pub get
 flutter run -d chrome
+```

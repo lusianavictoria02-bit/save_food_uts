@@ -24,30 +24,30 @@ Aplikasi mobile untuk mengurangi pemborosan makanan dengan menghubungkan bisnis 
 - `Badge` + `ListenableBuilder` menampilkan jumlah item di ikon Keranjang
 
 ### 1. Beranda
-<img src="screenshots/home.png" width="250" alt="Beranda">
+<img src="screenshots/home.png" width="180" alt="Beranda">
 
 - `CustomScrollView` + `SliverGrid` untuk grid produk responsif
 - `SearchBar`, `ChoiceChip` + `Wrap` untuk pencarian dan filter kategori
 - `Card` untuk banner dampak SDG 12 dan kartu produk
 
 ### 2. Detail Produk
-<img src="screenshots/detail.png" width="250" alt="Detail Produk">
+<img src="screenshots/detail.png" width="180" alt="Detail Produk">
 
 - `ListView` + `AspectRatio`, `Chip`, `IconButton.outlined`, `Divider`
 - `ConstrainedBox` membatasi lebar konten di layar besar
 
 ### 3. Keranjang / Checkout
-<img src="screenshots/cart.png" width="250" alt="Keranjang">
+<img src="screenshots/cart.png" width="180" alt="Keranjang">
 
 - `ListenableBuilder`, `ListView.separated`, `Card` + `Row`/`Column`
 
 ### 4. QR Code / Bukti Pickup
-<img src="screenshots/qr.png" width="250" alt="QR Pickup">
+<img src="screenshots/qr.png" width="180" alt="QR Pickup">
 
 - `QrImageView` (package `qr_flutter`), `Card`, `SingleChildScrollView`
 
 ### 5. Profil Pengguna
-<img src="screenshots/profile.png" width="250" alt="Profil">
+<img src="screenshots/profile.png" width="180" alt="Profil">
 
 - `CircleAvatar`, `StatTile` (widget buatan sendiri), `ListTile`, `OutlinedButton`
 - `RichText` untuk kalimat ringkasan dengan gaya teks campuran

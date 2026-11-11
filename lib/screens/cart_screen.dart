@@ -8,94 +8,116 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cart = CartModel.instance;
-    final tt = Theme.of(context).textTheme;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Keranjang Belanja'),
+        centerTitle: true,
+      ),
+      body: ListenableBuilder(
+        listenable: CartModel.instance,
+        builder: (context, child) {
+          final items = CartModel.instance.items;
 
-    return ListenableBuilder(
-      listenable: cart,
-      builder: (context, _) {
-        final items = cart.items;
-        return Scaffold(
-          appBar: AppBar(title: const Text('Keranjang')),
-          body: items.isEmpty
-              ? Center(
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(Icons.shopping_cart_outlined, size: 64, color: Theme.of(context).colorScheme.outline),
-                    const SizedBox(height: 8),
-                    Text('Keranjang masih kosong', style: tt.titleMedium),
-                  ]),
-                )
-              : ListView.separated(
+          if (items.isEmpty) {
+            return const Center(
+              child: Text(
+                'Keranjang belanja Anda masih kosong.',
+                style: TextStyle(fontSize: 16),
+              ),
+            );
+          }
+
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
                   padding: const EdgeInsets.all(16),
                   itemCount: items.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 8),
-                  itemBuilder: (context, i) {
-                    final item = items[i];
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Row(children: [
-                          SizedBox(
-                            width: 72,
-                            height: 72,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: ProductImage(path: item.product.image),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                              Text(item.product.name, style: tt.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
-                              Text(item.product.shop, style: tt.bodySmall),
-                              Text('${item.qty} x ${rupiah(item.product.price)}'),
-                            ]),
-                          ),
-                          IconButton(
-                            onPressed: () => cart.remove(item),
-                            icon: const Icon(Icons.delete_outline),
-                          ),
-                        ]),
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return ListTile(
+                      leading: SizedBox(
+                        width: 56,
+                        height: 56,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: ProductImage(path: item.product.image),
+                        ),
+                      ),
+                      title: Text(
+                        item.product.name,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        '${item.qty}x Rp ${item.product.price}',
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete_outline, color: Colors.red),
+                        onPressed: () {
+                          CartModel.instance.remove(item);
+                        },
                       ),
                     );
                   },
                 ),
-          bottomNavigationBar: items.isEmpty
-              ? null
-              : SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text('Total', style: tt.titleMedium),
-                        Text(rupiah(cart.total), style: tt.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-                      ]),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: double.infinity,
-                        child: PrimaryButton(
-                          label: 'Bayar & Buat QR Pickup',
-                          icon: Icons.qr_code,
-                          onPressed: () {
-                            final code = 'SF-${DateTime.now().millisecondsSinceEpoch % 100000}';
-                            final shops = items.map((e) => e.product.shop).toSet().join(', ');
-                            final pickup = items.first.product.pickupTime;
-                            final total = cart.total;
-                            cart.clear();
+              ),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Total Pembayaran:',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Rp ${CartModel.instance.total}',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      PrimaryButton(
+                        label: 'Lanjut ke Pembayaran (QR)',
+                        icon: Icons.qr_code,
+                        onPressed: () {
+                          if (CartModel.instance.items.isNotEmpty) {
+                            final total = CartModel.instance.total;
+                            CartModel.instance.clear();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => QrPickupScreen(orderCode: code, shop: shops, pickupTime: pickup, total: total),
+                                builder: (context) => QrPickupScreen(
+                                  orderCode: 'SB-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
+                                  shop: 'Toko Hemat Berkah',
+                                  pickupTime: '17:00 - 19:00 WIB',
+                                  total: total,
+                                ),
                               ),
                             );
-                          },
-                        ),
+                          }
+                        },
                       ),
-                    ]),
+                    ],
                   ),
                 ),
-        );
-      },
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

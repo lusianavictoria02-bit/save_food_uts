@@ -4,8 +4,16 @@ import '../widgets/common_widgets.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
+  // Data profil dipusatkan di satu tempat (masih statis, bukan lagi teks
+  // "Nama Pengguna"). Nanti bisa diganti dari Login/Register.
+  static const _nama = 'Victoria Lusiana Manullang';
+  static const _email = 'pengguna@email.com';
+  static const _jumlahDiselamatkan = 12;
+  static const _totalHemat = 'Rp180.000';
+
   void _soon(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Segera hadir')));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('Segera hadir')));
   }
 
   @override
@@ -32,16 +40,54 @@ class ProfileScreen extends StatelessWidget {
                 child: Icon(Icons.person, size: 48, color: cs.onPrimaryContainer),
               ),
               const SizedBox(height: 12),
-              Text('Nama Pengguna', style: tt.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-              const Text('pengguna@email.com'),
+              Text(_nama,
+                  style: tt.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+              const Text(_email),
+              const SizedBox(height: 12),
+              // RichText: satu kalimat dengan beberapa gaya teks (materi UI Components)
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
+                  children: [
+                    const TextSpan(text: 'Kamu sudah menyelamatkan '),
+                    TextSpan(
+                      text: '$_jumlahDiselamatkan makanan',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: cs.primary),
+                    ),
+                    const TextSpan(text: ' dan menghemat '),
+                    TextSpan(
+                      text: _totalHemat,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: cs.primary),
+                    ),
+                  ],
+                ),
+              ),
             ]),
             const SizedBox(height: 20),
             const Row(children: [
-              Expanded(child: StatTile(icon: Icons.restaurant, value: '12', label: 'Makanan diselamatkan')),
+              Expanded(
+                  child: StatTile(
+                      icon: Icons.restaurant,
+                      value: '$_jumlahDiselamatkan',
+                      label: 'Makanan diselamatkan')),
               SizedBox(width: 12),
-              Expanded(child: StatTile(icon: Icons.savings, value: 'Rp180.000', label: 'Total hemat')),
+              Expanded(
+                  child: StatTile(
+                      icon: Icons.savings,
+                      value: _totalHemat,
+                      label: 'Total hemat')),
             ]),
-            const SizedBox(height: 12),
+            const SizedBox(height: 20),
+            // Align: menempatkan judul bagian di sisi kiri (materi Layout Dasar)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Menu',
+                  style: tt.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+            ),
+            const SizedBox(height: 8),
             Card(
               child: Column(
                 children: [
